@@ -1,4 +1,6 @@
+require 'csv'
 class Products
+    @@csv_file = 'products.csv'
     def self.add_products
         puts "Enter the product details to add\n id,name,category,stock,price"
         @product= gets.chomp
@@ -36,18 +38,18 @@ class Products
             puts "Enter the product id. you want to delete"
             @item = gets.chomp
             products=File.readlines('products.csv').map { |line| line.chomp.split(',') }
-             deleted_rows = products.reject! { |row| row[0] == @item }
+            deleted_rows = products.reject! { |row| row[0] == @item }
 
 
-              if deleted_rows
+            if deleted_rows
             
-                 File.open('products.csv', 'w') do |file|
-                     products.each { |row| file.puts row.join(',') }
-                 end
-                 puts "Product with ID #{@item} was deleted successfully."
-               else
-                 puts "Product ID #{@item} not found."
-               end
+              File.open('products.csv', 'w') do |file|
+                  products.each { |row| file.puts row.join(',') }
+              end
+              puts "Product with ID #{@item} was deleted successfully."
+            else
+              puts "Product ID #{@item} not found."
+            end
             
         end
     end
@@ -58,11 +60,48 @@ class Products
    def self.view_products
         # file= File.new("products.txt","r")
         if File.zero?("products.csv")
-            puts "There is no product"
+          puts "There is no product"
         else
-            lines_count = 0
-            puts "Products are :"
-            IO.foreach("products.csv"){|item| puts  item}
+          lines_count = 0
+          puts "Products are :"
+          IO.foreach("products.csv"){|item| puts  item}
         end
     end
+
+	def self.search_product
+  	puts "Enter the product name to search"
+  	@item = gets.chomp
+  	CSV.foreach(@@csv_file, headers: true) do |row|
+  	  id = row['id']
+  	  item = row['item']
+  	  category = row['category']
+			stock = row['stock']
+   	  price = row['price']
+		  if (@item == item)
+			 puts "#{id},#{item},#{category},#{stock},#{price}"
+		# else
+		# 	puts "No product found"
+		  end
+		
+	  end 
+	end
+	def self.update_product_stock
+		puts "Enter the product name to update their stock"
+  	@item = gets.chomp
+		# Products.search_product
+		puts "Enter the updated stock"
+		@stock = gets.chomp
+    table = CSV.table(@@csv_file)
+
+    table.each do |row|
+      if row[:item] == @item
+          row[:stock] = @stock 
+        end
+    end
+    File.open(@@csv_file, 'w') do |f|
+      f.write(table.to_csv)
+    end
+    puts "Stock of #{@item} is updated successfully to #{@stock}"
+
+	end
 end

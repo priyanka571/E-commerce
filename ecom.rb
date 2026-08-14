@@ -1,5 +1,7 @@
 require_relative 'admin'
 require_relative 'customer'
+require 'csv'
+# require_relative 'customer'
 class EcomApp
     
     def self.sign_up
@@ -24,6 +26,7 @@ class EcomApp
     def self.login
         puts "Welcome to the Ecommerce"
         puts "Login"
+        csv_file = 'user.csv'
        
         @used_attempt =0
         3.times do
@@ -35,42 +38,53 @@ class EcomApp
             puts "please enter your role"
             @role = gets.chomp.downcase
 
-             if(@used_attempt>=3 && @name.strip.empty? && @pin.strip.empty?)
-            puts "three attemps failed"
-            exit
-                end
+            if(@used_attempt>=3 && @name.strip.empty? && @pin.strip.empty?)
+                puts "three attemps failed"
+                exit
+            end
   
-             redo if ((@name.strip.empty? && @pin.strip.empty?) &&  @used_attempt <3)
-            @pwd=@pin.to_i
+            if ((!@name.strip.empty? && !@pin.strip.empty?) &&  @used_attempt <3)
+                    @pin=@pin.to_i
+                
+                CSV.foreach(csv_file, headers: true) do |row|
+
+                    name = row['Name']
+                    pin = row['Pin']
+                    role = row['Role']
   
-            File.open("user.csv","r") do |file|
-                file.each_line do |line|
-                arr = line.split(",")
-                if(arr[0] == @name && arr[1] == @pin)
-                    puts "logged In Successfully"
+                
+                    
+                    if(name.downcase == @name && pin.to_i == @pin)
+                        puts "logged In Successfully"
+                        
 
-                     case
-                     when arr[2].downcase == "admin"
-                        AdminLogin.run
-                    #  when arr[2].downcase == "customer"
-                    #   Customer.call
-                     else
-                        puts "login failed"  
-                     end
+                         case
+                         when role.downcase == "admin"
+                            AdminLogin.run
+                         when role.downcase == "customer"
+                            Customer.run
+                         else
+                            puts "login failed"  
+                         end
+                    # else
+                    #     puts "Wrong Credentials"
+                    #     puts "#{name}, #{pin}, #{role}"
 
-
-                end
+                    end
+                    
             
 
-            end
+                end
+                puts "login Failed"
 
 
 
+            # end
         end
+
+
+
     end
-
-
-
 end
 end
 EcomApp.sign_up
