@@ -64,7 +64,7 @@ class EcomApp
                          when role.downcase == "customer"
                             Customer.run
                          else
-                            puts "login failed"  
+                            puts "Something went wrong"  
                          end
                     # else
                     #     puts "Wrong Credentials"
@@ -75,14 +75,14 @@ class EcomApp
             
 
                 end
-                puts "login Failed"
+                # puts "login Failed"
 
 
 
             # end
         end
 
-
+				break
 
     end
 end
