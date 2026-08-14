@@ -16,7 +16,7 @@ class AdminLogin
         
     end
 
-    def run 
+    def self.run 
         loop do
             display_menu
             choice = gets.chomp.to_i
@@ -38,8 +38,7 @@ class AdminLogin
     end
 
 end
-admin = AdminLogin.new
-admin.run
+# AdminLogin.run
 
 
    

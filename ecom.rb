@@ -1,50 +1,68 @@
 require_relative 'admin'
+require_relative 'customer'
 class EcomApp
     
-    def sign_up
+    def self.sign_up
     
         puts "Welcome to the Ecommerce"
-        puts "Sign In"
-        puts "enter your name"
-        @name = gets.chomp
-        puts "enter your 4 digit PIN"
-        @pin = gets.chomp
-        # @count = 0
-        # @total_num = @pin
-        # while total_num!=0
-        #     @count += 1
-        #     @total_num /=10
-            
-        # end
-        # puts count
-        # if @count !=4
-        #     puts "please enter 4 digit pin"
-        # end
-            
-        
-        
-       
-        File.open("user.csv", "a+") { |f| f.write("#{@name},#{@pin}\n") }
-        puts "Sign in Successfully"
-
-        # login
+        puts "login or SignIn"
+        reg = gets.chomp
+        if(reg == "SignIn")
+            puts "Sign In"
+            puts "enter your name"
+            @name = gets.chomp
+            puts "enter your 4 digit PIN"
+            @pin = gets.chomp 
+            @role = customer  
+            File.open("user.csv", "a+") { |f| f.write("#{@name},#{@pin},#{@role}\n") }
+            puts "Sign in Successfully"
+            EcomApp.login
+        else
+            EcomApp.login
+        end
     end
-    def login
+    def self.login
         puts "Welcome to the Ecommerce"
         puts "Login"
-        @attempt = 3
+       
         @used_attempt =0
         3.times do
+            @used_attempt +=1
             puts "Please enter name"
             @name = gets.chomp.downcase
             puts "please enter 4 digit PIN"
             @pin = gets.chomp
             puts "please enter your role"
             @role = gets.chomp.downcase
-            File.foreach("user.csv") do |line|
-                if line=~ /@name/ and line=~ /@pin/
-                    if @role == admin
 
+             if(@used_attempt>=3 && @name.strip.empty? && @pin.strip.empty?)
+            puts "three attemps failed"
+            exit
+                end
+  
+             redo if ((@name.strip.empty? && @pin.strip.empty?) &&  @used_attempt <3)
+            @pwd=@pin.to_i
+  
+            File.open("user.csv","r") do |file|
+                file.each_line do |line|
+                arr = line.split(",")
+                if(arr[0] == @name && arr[1] == @pin)
+                    puts "logged In Successfully"
+
+                     case
+                     when arr[2].downcase == "admin"
+                        AdminLogin.run
+                    #  when arr[2].downcase == "customer"
+                    #   Customer.call
+                     else
+                        puts "login failed"  
+                     end
+
+
+                end
+            
+
+            end
 
 
 
@@ -53,9 +71,9 @@ class EcomApp
 
 
 
-
 end
-ecom = EcomApp.new
-ecom.sign_up
+end
+EcomApp.sign_up
+
 
     

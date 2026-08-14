@@ -1,4 +1,4 @@
-class customer
+class Customer
     def display_menu
         
             puts "E-commerce website"
