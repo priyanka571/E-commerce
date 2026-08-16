@@ -1,4 +1,5 @@
 require_relative 'product'
+require_relative 'order'
 class AdminLogin
    
     def self.display_menu
@@ -14,7 +15,7 @@ class AdminLogin
 			puts "choose between 1-7"
     end
 
-    def self.run 
+    def self.run(id,name)
 			loop do
 					display_menu
 					choice = gets.chomp.to_i
@@ -31,8 +32,8 @@ class AdminLogin
 						Products.search_product
 					when 6
 						Products.update_product_stock
-					# when 7
-						# Orders.view_customer_orders
+					when 7
+						Order.view_customer_orders
 					when 8
 						break
 					else

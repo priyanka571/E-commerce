@@ -9,7 +9,7 @@ class Cart
         @product= gets.chomp
 				puts "please enter quantity"
 				@quantity = gets.chomp
-        product_found = false
+        @product_found = false
         CSV.foreach(@@product_file, headers: true) do |row|
             id = row['id']
   	        item = row['item']
@@ -22,22 +22,11 @@ class Cart
 								
 								csv << [id,item,category,@quantity,price,total_price]
     					end
-							product_found = true
-
-							table = CSV.table(@@product_file)
-							@updated_stock = stock - @quantity.to_i
-    					table.each do |row|
-    					  if row[:item] == @product
-    					      row[:stock] = @updated_stock 
-    					    end
-    					end
-    					File.open(@@product_file, 'w') do |f|
-    					  f.write(table.to_csv)
-    					end	
+							@product_found = true
 							break
             end
 				end
-				if product_found
+				if @product_found
          puts "item added successfully in cart"
 				else
 					puts "Product not found"
@@ -49,21 +38,23 @@ class Cart
       @item = gets.chomp
 			CSV.foreach(@@cart_file, headers: true) do |row|
             id = row['id']
-  	        product = row['product']
+  	        product = row['item']
   	  			category = row['category']
 						quantity = row['quantity'].to_i
    	  			price = row['price'].to_i
 						total = row['total'].to_i
-						product_found = false
+						@product_found = false
+						
 						if (@item == product)
-							product_found = true
+							@product_found = true
+							
 							table = CSV.table(@@cart_file)
     					table.each do |row|
-    					  if row[:product] == @item
+    					  if row[:item] == @item
     					      row[:id] = nil
-										row[:product] = nil
+										row[:item] = nil
 										row[:category] = nil
-										row[:quantity] = nil
+										row[:stock] = nil
 										row[:price] = nil
 										row[:total] = nil 
     					  end
@@ -74,7 +65,7 @@ class Cart
 							break
          		end
 				end
-				if product_found
+				if @product_found
 					puts "item deleted Successfully"
 				else
 					puts "items not found"
@@ -88,37 +79,24 @@ class Cart
 			@quantity = gets.chomp
 			
 			
-			table = CSV.table(@@cart_file)
+			table = CSV.table(@@product_file)
 
       table.each do |row|
-      	if row[:item] == @item
-					temp = row[:quantity]
-          row[:quantity] = @quantity
-					diff = temp.to_i - @quantity.to_i
-					p temp.to_i
-					p @diff
-					p @quantity.to_i
-					
-						table = CSV.table(@@product_file)
-    				table.each do |row|
-      				if row[:item] == @item
-								if @diff > 0
-          				row[:stock] = row[:stock] + diff.to_i
-								else
-									row[:stock] = row[:stock] - diff.to_i
-								end
-
+      	if row[:item] == @item && @quantity.to_i <=row[:stock].to_i
+						tab = CSV.table(@@cart_file)
+    				tab.each do |r|
+      				if r[:item] == @item
+          				r[:stock] = @quantity
         			end
     				end
-    				File.open(@@product_file, 'w') do |f|
-      				f.write(table.to_csv)
+    				File.open(@@cart_file, 'w') do |f|
+      				f.write(tab.to_csv)
     				end
+						puts "Quantity updated successfully"
 
       	end
     	end
-    	File.open(@@cart_file, 'w') do |f|
-      	f.write(table.to_csv)
-    	end
+    	
       
     end
     def self.view_cart
@@ -131,6 +109,7 @@ class Cart
 			  puts "#{id},#{item},#{category},#{stock},#{price}"
 	    end 
     end
+	
 end
 
 

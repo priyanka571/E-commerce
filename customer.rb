@@ -19,7 +19,7 @@ class Customer
             puts "choose between 1-9"
         
     end
-     def self.run 
+     def self.run(id,name)
         loop do
             display_menu
             choice = gets.chomp.to_i

@@ -1,5 +1,5 @@
 id,item,category,stock,price
-1,cup,ceramic,55,100
-2,sofa,furniture,125,20000
-3,dress,formal,40,2000
+1,cup,ceramic,20,100
+2,sofa,furniture,25,20000
+3,dress,formal,30,2000
 4,bottle,accessories,0,20

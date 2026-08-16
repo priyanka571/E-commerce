@@ -11,8 +11,11 @@ class EcomApp
         reg = gets.chomp
         if(reg == "SignIn")
             puts "Sign In"
+            puts "enter user id"
+            @id = gets.chomp
             puts "enter your name"
             @name = gets.chomp
+            name = @name
             puts "enter your 4 digit PIN"
             @pin = gets.chomp 
             @role = customer  
@@ -51,6 +54,7 @@ class EcomApp
                     name = row['Name']
                     pin = row['Pin']
                     role = row['Role']
+                    id = row['ID']
   
                 
                     
@@ -60,9 +64,9 @@ class EcomApp
 
                          case
                          when role.downcase == "admin"
-                            AdminLogin.run
+                            AdminLogin.run(id,name)
                          when role.downcase == "customer"
-                            Customer.run
+                            Customer.run(id,name)
                          else
                             puts "Something went wrong"  
                          end

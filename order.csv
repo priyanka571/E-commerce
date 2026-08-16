@@ -1,2 +1,5 @@
-id,item,category,stock,price,total_price
-4,bottle,accessories,9,20,180
+id,item,category,stock,price,total_price,placed_by
+4,bottle,accessories,9,20,180,riya
+2,sofa,furniture,25,20000,500000,priyanka
+1,cup,ceramic,55,100,5500,riya
+2,sofa,furniture,25,20000,500000,priyanka
