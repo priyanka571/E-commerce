@@ -7,10 +7,10 @@ class EcomApp
     def self.sign_up
     
         puts "Welcome to the Ecommerce"
-        puts "login or SignIn"
-        reg = gets.chomp
-        if(reg == "SignIn")
-            puts "Sign In"
+        puts "login or Signup"
+        reg = gets.chomp.downcase
+        if(reg == "signup")
+            puts "Sign up"
             puts "enter user id"
             @id = gets.chomp
             puts "enter your name"
@@ -18,9 +18,9 @@ class EcomApp
             name = @name
             puts "enter your 4 digit PIN"
             @pin = gets.chomp 
-            @role = customer  
-            File.open("user.csv", "a+") { |f| f.write("#{@name},#{@pin},#{@role}\n") }
-            puts "Sign in Successfully"
+            @role = "customer"  
+            File.open("user.csv", "a+") { |f| f.write("#{@id},#{@name},#{@pin},#{@role}\n") }
+            puts "Registered Successfully"
             EcomApp.login
         else
             EcomApp.login
@@ -50,19 +50,15 @@ class EcomApp
                     @pin=@pin.to_i
                 
                 CSV.foreach(csv_file, headers: true) do |row|
-
+										id = row['ID']
                     name = row['Name']
                     pin = row['Pin']
                     role = row['Role']
-                    id = row['ID']
-  
-                
+										p row
                     
                     if(name.downcase == @name && pin.to_i == @pin)
                         puts "logged In Successfully"
-                        
-
-                         case
+                        case
                          when role.downcase == "admin"
                             AdminLogin.run(id,name)
                          when role.downcase == "customer"
@@ -70,20 +66,12 @@ class EcomApp
                          else
                             puts "Something went wrong"  
                          end
-                    # else
-                    #     puts "Wrong Credentials"
-                    #     puts "#{name}, #{pin}, #{role}"
-
                     end
                     
             
 
                 end
-                # puts "login Failed"
-
-
-
-            # end
+         
         end
 
 				break
