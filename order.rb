@@ -22,7 +22,7 @@ class Order
 			puts "Enter customer name to search orders:"
   		customer_name = gets.chomp.strip.downcase
   		found = false
-  		puts "\n===================== ORDERS PLACED BY: #{customer_name.upcase} ====================="
+  		puts "\n=ORDERS PLACED BY: #{customer_name.upcase} ="
   		printf("%-6s | %-12s | %-12s | %-8s | %-10s | %-12s\n",
          "ID", "Item", "Category", "Quantity", "Price", "Total Price")
  			puts "-" * 70
@@ -43,7 +43,7 @@ class Order
 
 	end
 
-	 def self.place_orders
+	 def self.place_orders(id,name)
         Cart.view_cart
         puts "please choose product name from the list"
         @product= gets.chomp

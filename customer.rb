@@ -37,7 +37,7 @@ class Customer
             when 6
                 Cart.view_cart
             when 7
-                Order.place_orders
+                Order.place_orders(id,name)
             when 8
                 Order.view_order_history
             when 9
