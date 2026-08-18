@@ -5,7 +5,19 @@ class Order
     @@cart_file = 'cart.csv'
     @@order_file = 'order.csv'
 	  @@product_file = 'products.csv'
-  
+	
+	   def self.order_id
+		
+    	max_id = 0
+    	CSV.foreach(@@order_file, headers: true) do |row|
+      	id_val = (row['id']).to_i
+				if id_val > max_id
+					max_id = id_val 
+				end
+    	end
+   		max_id + 1
+  	end	
+
     def self.view_order_history
 			CSV.foreach(@@order_file, headers: true) do |row|
   			id = row['id']
@@ -57,8 +69,11 @@ class Order
 						stock = row['stock'].to_i
    	  			price = row['price'].to_i
 						placed_by = name
+						
 						if (@product == item && @quantity.to_i <= stock.to_i)
+
 							total_price = price * @quantity.to_i
+
 							CSV.open(@@order_file, 'a') do |csv|
 								
 								csv << [id,item,category,@quantity,price,total_price,placed_by]
