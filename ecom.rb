@@ -1,8 +1,20 @@
 require_relative 'admin'
 require_relative 'customer'
 require 'csv'
-# require_relative 'customer'
+
 class EcomApp
+	 @@user_file = 'user.csv'
+	 def self.user_id
+		
+    	max_id = 0
+    	CSV.foreach(@@user_file, headers: true) do |row|
+      	id_val = (row['Id']).to_i
+				if id_val > max_id
+					max_id = id_val 
+				end
+    	end
+   		max_id + 1
+  	end	
     
     def self.sign_up
     
@@ -11,8 +23,7 @@ class EcomApp
         reg = gets.chomp.downcase
         if(reg == "signup")
             puts "Sign up"
-            puts "enter user id"
-            @id = gets.chomp
+            @id = user_id
             puts "enter your name"
             @name = gets.chomp
             name = @name
@@ -54,7 +65,7 @@ class EcomApp
                     name = row['Name']
                     pin = row['Pin']
                     role = row['Role']
-										p row
+										
                     
                     if(name.downcase == @name && pin.to_i == @pin)
                         puts "logged In Successfully"

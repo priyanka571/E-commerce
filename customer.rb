@@ -1,7 +1,7 @@
 require_relative 'product'
 require_relative 'order'
 require_relative 'cart'
-# require_relative 'order'
+
 
 class Customer
     def self.display_menu

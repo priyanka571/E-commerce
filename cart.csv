@@ -1,2 +1,2 @@
-id,item,category,stock,price
+id,item,category,stock,price,total,customer_name,customer_id
 2,sofa,furniture,20,20000,400000
