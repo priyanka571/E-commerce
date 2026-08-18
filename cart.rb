@@ -34,45 +34,72 @@ class Cart
 		end
 
     def self.remove_product_cart
-			puts "Enter the product name. you want to delete"
-      @item = gets.chomp
-			CSV.foreach(@@cart_file, headers: true) do |row|
-            id = row['id']
-  	        product = row['item']
-  	  			category = row['category']
-						quantity = row['quantity'].to_i
-   	  			price = row['price'].to_i
-						total = row['total'].to_i
-						@product_found = false
+
+
+			 if !File.exist?("cart.csv") || File.zero?("cart.csv")
+            puts "There is no product"
+        else
+            view_cart
+            puts "Enter the product id. you want to delete"
+            @item = gets.chomp
+            products=File.readlines('cart.csv').map { |line| line.chomp.split(',') }
+            deleted_rows = products.reject! { |row| row[0] == @item }
+
+
+            if deleted_rows
+            
+              File.open('cart.csv', 'w') do |file|
+                  products.each { |row| file.puts row.join(',') }
+              end
+              puts "Product with ID #{@item} was deleted successfully."
+            else
+              puts "Product ID #{@item} not found."
+            end
+            
+        end
+
+			# puts "Enter the product name. you want to delete"
+      # @item = gets.chomp
+			# CSV.foreach(@@cart_file, headers: true) do |row|
+      #       id = row['id']
+  	  #       product = row['item']
+  	  # 			category = row['category']
+			# 			quantity = row['quantity'].to_i
+   	  # 			price = row['price'].to_i
+			# 			total = row['total'].to_i
+			# 			@product_found = false
 						
-						if (@item == product)
-							@product_found = true
+			# 			if (@item == product)
+			# 				@product_found = true
 							
-							table = CSV.table(@@cart_file)
-    					table.each do |row|
-    					  if row[:item] == @item
-    					      row[:id] = nil
-										row[:item] = nil
-										row[:category] = nil
-										row[:stock] = nil
-										row[:price] = nil
-										row[:total] = nil 
-    					  end
-    				  end
-    				  File.open(@@cart_file, 'w') do |f|
-    				  	f.write(table.to_csv)
-    					end	
-							break
-         		end
-				end
-				if @product_found
-					puts "item deleted Successfully"
-				else
-					puts "items not found"
-				end
+			# 				table = CSV.table(@@cart_file)
+    	# 				table.each do |row|
+    	# 				  if row[:item] == @item
+    	# 				      # row[:id] = nil
+			# 							# row[:item] = nil
+			# 							# row[:category] = nil
+			# 							# row[:stock] = nil
+			# 							# row[:price] = nil
+			# 							# row[:total] = nil 
+			# 							# table.reject! { |row| row[:item] == @item }
+			# 							# table.reject! row
+    	# 				  end
+    	# 			  end
+    	# 			  File.open(@@cart_file, 'w') do |f|
+    	# 			  	f.write(table.to_csv)
+    	# 				end	
+			# 				break
+      #    		end
+			# 	end
+			# 	if @product_found
+			# 		puts "item deleted Successfully"
+			# 	else
+			# 		puts "items not found"
+			# 	end
     end
 
     def self.update_product_quantity
+			view_cart
 			puts "enter the product name who's quantity you want to update"
 			@item = gets.chomp
 			puts "enter the updated quantity"

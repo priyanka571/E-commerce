@@ -2,7 +2,7 @@ id,item,category,stock,price
 1,cup,crockery,200,20
 2,mattress,furniture,25,20000
 3,dress,formal,28,2000
-4,bottle,accessories,100,20
+4,bottle,accessories,70,20
 5,sofa,furniture,200,2000
-6,glass,crockery,90,20
+6,glasses,crockery,90,20
 ,,,,

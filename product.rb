@@ -43,8 +43,6 @@ class Products
 
         table.each do |row|
           if row[:id].to_s == id
-            p update
-            p 1
             product_found = true
        
           if update.to_i == 1
